@@ -1,57 +1,57 @@
-def _pad_key(plaintext, key):
-    padded_key = ''
+def detail_cle(texte_clair, cle):
+    cle_detail = ''
     i = 0
-    for char in plaintext:
+    for char in texte_clair:
         if char.isalpha():
-            padded_key += key[i % len(key)]
+            cle_detail += cle[i % len(cle)]
             i += 1
         else:
-            padded_key += ''
+            cle_detail += ''
     
-    return padded_key
+    return cle_detail
 
 
-def _encrypt_descrypt_char(plaintext_char, key_char, mode='encrypt'):
+def encrypt_descrypt_char(texte_clair_char, cle_char, mode='encrypt'):
     
-    if plaintext_char.isalpha():
-        first_alphabet_letter = 'a'
-        if plaintext_char.isupper():
-            first_alphabet_letter = 'A'
+    if texte_clair_char.isalpha():
+        premiere_lettre_alphabet = 'a'
+        if texte_clair_char.isupper():
+            premiere_lettre_alphabet = 'A'
             
-        ord_char_position = ord(plaintext_char) - ord(first_alphabet_letter)
-        key_char_position = ord(key_char.lower()) - ord('a')
+        texte_char_position = ord(texte_clair_char) - ord(premiere_lettre_alphabet)
+        cle_char_position = ord(cle_char.lower()) - ord('a')
         
         if mode == 'encrypt' :
-            new_char_position = (ord_char_position + key_char_position) % 26
+            new_char_position = (texte_char_position + cle_char_position) % 26
         else :
-            new_char_position = (ord_char_position - key_char_position + 26) % 26
-        return chr(new_char_position + ord(first_alphabet_letter))
-    return plaintext_char
+            new_char_position = (texte_char_position - cle_char_position + 26) % 26
+        return chr(new_char_position + ord(premiere_lettre_alphabet))
+    return texte_clair_char
 
-def encrypt(plaintext, key):
-    ciphertext = ''
-    padded_key = _pad_key(plaintext, key)
-    for plaintext_char, key_char in zip(plaintext, padded_key):
-         ciphertext += _encrypt_descrypt_char(plaintext_char, key_char)
-    return ciphertext
+def encrypt(texte_clair, cle):
+    text_chiffre = ''
+    cle_remboure = detail_cle(texte_clair, cle)
+    for texte_clair_char, cle_char in zip(texte_clair, cle_remboure):
+         text_chiffre += encrypt_descrypt_char(texte_clair_char, cle_char)
+    return text_chiffre
 
-def decrypt(ciphertext, key):
-    plaintext = ''
-    padded_key = _pad_key(ciphertext, key)
-    for ciphertext_char, key_char in zip(ciphertext, padded_key):
-        plaintext += _encrypt_descrypt_char(ciphertext_char, key_char, mode='decrypt')
-    return plaintext
+def decrypt(texte_chiffre, cle):
+    texte_clair = ''
+    cle_remboure = detail_cle(texte_chiffre, cle)
+    for texte_chiffre_char, cle_char in zip(texte_chiffre, cle_remboure):
+        texte_clair += encrypt_descrypt_char(texte_chiffre_char, cle_char, mode='decrypt')
+    return texte_clair
 
-plaintext = input('Entrez le message a crypter :  ')
-key = input('Entrez la cle: ')
-# print(plaintext)
-# print(key)
+texte_clair = input('Entrez le message a crypter :  ')
+cle = input('Entrez la cle: ')
+# print(texte_clair)
+# print(cle)
 
-ciphertext = encrypt(plaintext, key)
-# print(encrypt(plaintext, key))
-decrypt_plaintext = decrypt(ciphertext, key)
+texte_chiffre = encrypt(texte_clair, cle)
+# print(encrypt(texte_clair, cle))
+texte_decrypte = decrypt(texte_chiffre, cle)
 
-print(f' Le texte crypté est : {ciphertext}') 
-print(f'texte décrypté est : {decrypt_plaintext}')    
+print(f' Le texte crypté est : {texte_chiffre}') 
+print(f' Le texte décrypté est : {texte_decrypte}')    
 
             
